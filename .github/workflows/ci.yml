@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  metrics:
+    name: hashkit tests (py${{ matrix.python-version }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.9", "3.11"]
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      # 评测指标与深度学习框架解耦，所以 CI 不需要装 torch（省掉数 GB 和几分钟）
+      - name: Install numpy
+        run: python -m pip install --upgrade pip numpy
+
+      - name: Run tests
+        run: python -m unittest discover -s tests -t . -v
+
+  syntax:
+    name: compile all python files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Byte-compile the whole tree
+        run: python -m compileall -q models utils train evaluate demo synthetic_detector hashkit
+
+  lint:
+    name: ruff
+    runs-on: ubuntu-latest
+    continue-on-error: true      # legacy research code is not lint-clean yet
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install ruff
+      - run: ruff check hashkit tests --output-format=github
