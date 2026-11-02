@@ -1,0 +1,57 @@
+# ---- Python ----
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ---- 虚拟环境 ----
+venv/
+.venv/
+env/
+ENV/
+
+# ---- 测试 ----
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# ---- 编辑器 ----
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# ---- 数据集与模型权重（体积大，请按 README 自行生成/下载）----
+# 注意：只忽略仓库根目录下的数据目录，别把 synthetic_detector/data/ 这类源码目录吃掉
+/data/
+/datasets/
+/checkpoints/
+/results/
+/runs/
+/logs/
+/predictions/
+/visualizations/
+/model_results/
+/synthetic_data/
+
+*.pth
+*.pt
+*.ckpt
+*.pkl
+*.h5
+*.npy
+*.npz
+*.gz
+*.zip
+*.tfevents.*
+
+# ---- 凭据 ----
+.env
+.env.*
+!.env.example
