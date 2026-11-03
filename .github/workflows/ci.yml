@@ -13,7 +13,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: ["3.9", "3.11"]
+        python-version: ["3.11", "3.12"]
 
     steps:
       - uses: actions/checkout@v4
@@ -44,11 +44,12 @@ jobs:
   lint:
     name: ruff
     runs-on: ubuntu-latest
-    continue-on-error: true      # legacy research code is not lint-clean yet
+    continue-on-error: true      # 存量研究代码尚未 lint-clean，仅作提示
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: "3.11"
       - run: pip install ruff
-      - run: ruff check hashkit tests --output-format=github
+      - name: ruff (advisory)
+        run: ruff check hashkit tests --output-format=github || true
